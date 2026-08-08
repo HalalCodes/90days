@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>90days - ৯০ দিনের চ্যালেঞ্জ ট্র্যাকার</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="https://onlinecdndrive.vercel.app/90dayslogo.png">
     <meta name="theme-color" content="#2563eb">
     <style>
         :root {
@@ -80,12 +79,26 @@
             gap: 10px;
         }
 
-        .app-logo {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
+        .app-logo-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+            flex-shrink: 0;
+        }
+
+        .app-logo-img {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
             object-fit: cover;
-            border: 1px solid var(--card-border);
         }
 
         .clock-container {
@@ -100,7 +113,7 @@
         }
 
         .clock-time {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: var(--accent-color);
         }
@@ -389,7 +402,10 @@
 <div class="container">
     <header>
         <div class="app-brand">
-            <img src="https://onlinecdndrive.vercel.app/90dayslogo.png" alt="90days Logo" class="app-logo" onerror="this.style.display='none'">
+            <!-- লোগো ফলব্যাক সহ -->
+            <div class="app-logo-box" id="logoBox">
+                <img src="https://onlinecdndrive.vercel.app/90dayslogo.png" alt="90" class="app-logo-img" id="logoImg" onerror="handleLogoError()">
+            </div>
             <div class="clock-container">
                 <span class="clock-title">90days - বর্তমান সময়</span>
                 <span class="clock-time" id="liveClock">০০:০০:০০ AM</span>
@@ -453,6 +469,13 @@
 </div>
 
 <script>
+function handleLogoError() {
+    const img = document.getElementById('logoImg');
+    if (img) img.style.display = 'none';
+    const box = document.getElementById('logoBox');
+    if (box) box.textContent = '90d';
+}
+
 // ৯০টি আলাদা মোটিভেশনাল উক্তি
 const quotes = [
     "১. সাফল্যের প্রথম ধাপ হলো শুরু করা।", "২. কঠোর পরিশ্রম কখনোই ব্যর্থ হয় না।", "৩. প্রতি সূর্যোদয় একটি নতুন সুযোগ নিয়ে আসে।",
@@ -499,46 +522,60 @@ function toBengaliNumerals(str) {
 // Database Setup
 const DB_NAME = '90DaysHabitDB';
 const DB_VERSION = 1;
-let db;
+let db = null;
 let currentViewingDay = 1;
 
 function initDB() {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        request.onupgradeneeded = (e) => {
-            db = e.target.result;
-            if (!db.objectStoreNames.contains('days_store')) db.createObjectStore('days_store', { keyPath: 'dayNumber' });
-            if (!db.objectStoreNames.contains('settings_store')) db.createObjectStore('settings_store', { keyPath: 'key' });
-        };
-        request.onsuccess = (e) => { db = e.target.result; resolve(db); };
-        request.onerror = (e) => reject(e.target.errorCode);
+    return new Promise((resolve) => {
+        try {
+            const request = indexedDB.open(DB_NAME, DB_VERSION);
+            request.onupgradeneeded = (e) => {
+                db = e.target.result;
+                if (!db.objectStoreNames.contains('days_store')) db.createObjectStore('days_store', { keyPath: 'dayNumber' });
+                if (!db.objectStoreNames.contains('settings_store')) db.createObjectStore('settings_store', { keyPath: 'key' });
+            };
+            request.onsuccess = (e) => { db = e.target.result; resolve(db); };
+            request.onerror = (e) => { console.error('DB Error', e); resolve(null); };
+        } catch(err) {
+            console.error('IndexedDB Exception', err);
+            resolve(null);
+        }
     });
 }
 
 function getStoreData(storeName, key) {
     return new Promise((resolve) => {
-        const tx = db.transaction(storeName, 'readonly');
-        const req = tx.objectStore(storeName).get(key);
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => resolve(null);
+        if (!db) { resolve(null); return; }
+        try {
+            const tx = db.transaction(storeName, 'readonly');
+            const req = tx.objectStore(storeName).get(key);
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => resolve(null);
+        } catch(e) { resolve(null); }
     });
 }
 
 function getAllStoreData(storeName) {
     return new Promise((resolve) => {
-        const tx = db.transaction(storeName, 'readonly');
-        const req = tx.objectStore(storeName).getAll();
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => resolve([]);
+        if (!db) { resolve([]); return; }
+        try {
+            const tx = db.transaction(storeName, 'readonly');
+            const req = tx.objectStore(storeName).getAll();
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror = () => resolve([]);
+        } catch(e) { resolve([]); }
     });
 }
 
 function saveStoreData(storeName, data) {
     return new Promise((resolve) => {
-        const tx = db.transaction(storeName, 'readwrite');
-        tx.objectStore(storeName).put(data);
-        tx.oncomplete = () => resolve(true);
-        tx.onerror = () => resolve(false);
+        if (!db) { resolve(false); return; }
+        try {
+            const tx = db.transaction(storeName, 'readwrite');
+            tx.objectStore(storeName).put(data);
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = () => resolve(false);
+        } catch(e) { resolve(false); }
     });
 }
 
@@ -615,7 +652,7 @@ async function renderCurrentDayCard(dayNum, slideDirection = 'none') {
             <span class="day-title">দিন ${toBengaliNumerals(dayNum)}</span>
             <span class="badge ${badgeClass}">${badgeText}</span>
         </div>
-        <div class="quote-box">${quotes[dayNum - 1]}</div>
+        <div class="quote-box">${quotes[dayNum - 1] || 'উক্তি লোড হচ্ছে...'}</div>
         <textarea class="note-area" id="noteInput" placeholder="আজকের অভিজ্ঞতা এবং চিন্তাভাবনা লিখুন..." ${maxEditReached ? 'disabled' : ''}>${dayInfo.note || ''}</textarea>
         <div class="card-actions">
             <div class="action-row">
@@ -862,19 +899,26 @@ async function checkNotificationTrigger() {
 }
 setInterval(checkNotificationTrigger, 5000);
 
-// App Load Initialization
-window.onload = async () => {
+// App Load Initialization Fix
+window.addEventListener('DOMContentLoaded', async () => {
     await initDB();
     await initTheme();
-    const daysData = await getAllStoreData('days_store');
-    const daysMap = {};
-    daysData.forEach(d => daysMap[d.dayNumber] = d);
+    
     let startDay = 1;
-    for (let i = 1; i <= 90; i++) {
-        if (!daysMap[i] || !daysMap[i].completed) { startDay = i; break; }
+    try {
+        const daysData = await getAllStoreData('days_store');
+        const daysMap = {};
+        daysData.forEach(d => daysMap[d.dayNumber] = d);
+        for (let i = 1; i <= 90; i++) {
+            if (!daysMap[i] || !daysMap[i].completed) { startDay = i; break; }
+        }
+    } catch(err) {
+        console.log('Default start day fallback');
     }
+    
+    // নিশ্চিত কার্ড রেন্ডার
     renderCurrentDayCard(startDay);
-};
+});
 </script>
 </body>
 </html>
