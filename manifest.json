@@ -3,6 +3,7 @@
 "short_name": "90days",
 "description": "৯০ দিনের অভ্যাসের অগ্রগতি ট্র্যাক করার জন্য প্রফেশনাল অফলাইন অ্যাপ",
 "start_url": "./index.html",
+"scope": "./",
 "display": "standalone",
 "orientation": "portrait",
 "background_color": "#0f172a",
