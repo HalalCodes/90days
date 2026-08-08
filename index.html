@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>90days - ৯০ দিনের চ্যালেঞ্জ ট্র্যাকার</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="https://onlinecdndrive.vercel.app/90dayslogo.png">
     <meta name="theme-color" content="#2563eb">
     <style>
         :root {
@@ -92,12 +93,12 @@
             font-size: 14px;
             box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
             flex-shrink: 0;
+            overflow: hidden;
         }
 
         .app-logo-img {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
         }
 
@@ -176,7 +177,7 @@
             font-weight: 500;
         }
 
-        /* Slide Viewport & Touch Controls */
+        /* Slide Viewport Controls */
         .slider-wrapper {
             position: relative;
             width: 100%;
@@ -402,7 +403,6 @@
 <div class="container">
     <header>
         <div class="app-brand">
-            <!-- লোগো ফলব্যাক সহ -->
             <div class="app-logo-box" id="logoBox">
                 <img src="https://onlinecdndrive.vercel.app/90dayslogo.png" alt="90" class="app-logo-img" id="logoImg" onerror="handleLogoError()">
             </div>
@@ -449,7 +449,7 @@
             <button class="close-btn" id="settingsClose">&times;</button>
         </div>
         <div class="form-group">
-            <button class="btn" id="requestNotifBtn" style="width:100%; margin-bottom: 8px;">নোটিফিকেশন অনুমতি দিন</button>
+            <button class="btn" id="requestNotifBtn" style="width:100%; margin-bottom: 8px;">অনুমতি দিন ও টেস্ট নোটিফিকেশন পাঠান</button>
             <p id="notifStatus" style="font-size:11px; text-align:center;"></p>
         </div>
         <div class="form-group">
@@ -476,7 +476,7 @@ function handleLogoError() {
     if (box) box.textContent = '90d';
 }
 
-// ৯০টি আলাদা মোটিভেশনাল উক্তি
+// ৯০টি আলাদা উক্তি
 const quotes = [
     "১. সাফল্যের প্রথম ধাপ হলো শুরু করা।", "২. কঠোর পরিশ্রম কখনোই ব্যর্থ হয় না।", "৩. প্রতি সূর্যোদয় একটি নতুন সুযোগ নিয়ে আসে।",
     "৪. ছোট ছোট প্রতিদিনের পরিবর্তন বড় ফল নিয়ে আসে।", "৫. নিজেকে বিশ্বাস করো, তুমি পারবে।", "৬. আপনার সময় সীমিত, তাই অন্যের জীবন বেঁচে এটি নষ্ট করবেন না।",
@@ -494,7 +494,7 @@ const quotes = [
     "৪০. ব্যর্থতা হলো সাফল্যের প্রথম ধাপ।", "৪১. মনে রাখুন, অন্ধকারের পরেই আলো আসে।", "৪২. স্বপ্ন সত্যি করতে হলে আগে স্বপ্ন দেখতে হবে।",
     "৪৩. নিজেকে প্রতিনিয়ত আপডেট রাখুন।", "৪৪. কাজ করে যান, ফলাফল স্বয়ংক্রিয়ভাবে আসবে।", "৪৫. আজকের আত্মত্যাগ আগামীকালের সাফল্য এনে দেবে।",
     "৪৬. শান্ত থাকুন এবং নিজের কাজ করে যান।", "৪৭. আপনার মনকে সব অবস্থায় ইতিবাচক রাখতে শিখুন।", "৪৮. ভয়কে জয় করাই হলো সত্যিকারের বীরত্ব।",
-    "৪৯. প্রতিদিন নিজেকে আগের দিনের চেয়ে ১% উন্নত করুন।", "৫০. কখনোই হাল ছেড়ে দেবেন না।", "৫১. সাফল্য কোনো দুর্ঘটনা নয়, এটি কঠোর পরিশ্রমের ফল।",
+    "৪৯. প্রতিদিন নিজেকে আগের দিনের চেয়ে ১% উন্নত করুন।", "৫০. কখনোই HAL ছেড়ে দেবেন না।", "৫১. সাফল্য কোনো দুর্ঘটনা নয়, এটি কঠোর পরিশ্রমের ফল।",
     "৫২. দৃষ্টিভঙ্গি পরিবর্তন করুন, জীবন বদলে যাবে।", "৫৩. আপনার সীমাবদ্ধতা কেবল আপনার মনের ভেতরে।", "৫৪. কাজ করার সঠিক মনোভাব সব বাধা দূর করে।",
     "৫৫. প্রতিটি ছোট অর্জন উদযাপন করুন।", "৫৬. নতুন কিছু শিখতে কখনো দ্বিধা করবেন না।", "৫৭. মন স্থির থাকলে যেকোনো কঠিন কাজ সহজ হয়।",
     "৫৮. সময়কে মূল্য দিন, সময় আপনাকে মূল্য দেবে।", "৫৯. আত্মবিশ্বাস সাফল্যের অর্ধেক।", "৬০. আপনি যেখানে আছেন সেখান থেকেই শুরু করুন।",
@@ -592,7 +592,7 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// Theme Toggle
+// Theme
 let currentTheme = 'light';
 async function initTheme() {
     const savedTheme = await getStoreData('settings_store', 'theme');
@@ -608,7 +608,7 @@ document.getElementById('themeToggle').addEventListener('click', async () => {
     await saveStoreData('settings_store', { key: 'theme', value: currentTheme });
 });
 
-// Render Day Card Component
+// Render Day Card
 async function renderCurrentDayCard(dayNum, slideDirection = 'none') {
     const daysData = await getAllStoreData('days_store');
     const daysMap = {};
@@ -691,7 +691,7 @@ window.navigateDay = function(direction) {
     renderCurrentDayCard(targetDay, slideDir);
 };
 
-// Touch Gesture Implementation
+// Touch Gestures
 let startX = 0;
 let currentX = 0;
 let isDragging = false;
@@ -738,7 +738,7 @@ sliderWrapper.addEventListener('touchend', (e) => {
     currentX = 0;
 });
 
-// Business Logic: Completion and Limits
+// Business Logic
 window.handleCompletionToggle = async function(dayNum) {
     const existing = await getStoreData('days_store', dayNum) || { dayNumber: dayNum, note: '', editCount: 0, completed: false };
     if (existing.editCount >= 3) { renderCurrentDayCard(dayNum); return; }
@@ -782,7 +782,7 @@ window.handleSaveNote = async function(dayNum) {
     }
 };
 
-// Web Audio Bell Signal
+// Audio Signal
 function playNotificationSound() {
     try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -802,11 +802,18 @@ function playNotificationSound() {
     } catch(e){}
 }
 
-// PWA Service Worker & Notification Setup
+// Fixed Relative Service Worker Registration for GitHub Pages
+let swRegistration = null;
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-    .then(reg => console.log('90days SW Active', reg))
-    .catch(err => console.error('SW Failed', err));
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js', { scope: './' })
+        .then(reg => {
+            swRegistration = reg;
+            console.log('90days SW Active on GitHub Pages Scope:', reg.scope);
+            updateNotifStatusUI();
+        })
+        .catch(err => console.error('SW Registration Failed:', err));
+    });
 }
 
 const settingsModal = document.getElementById('settingsModal');
@@ -836,19 +843,42 @@ document.getElementById('saveSettingsBtn').addEventListener('click', async () =>
 function updateNotifStatusUI() {
     const statusText = document.getElementById('notifStatus');
     if (!('Notification' in window)) {
-        statusText.textContent = 'ব্রাউজার নোটিফিকেশন সাপোর্টেড নয় (HTTPS সার্ভিস প্রয়োজন)।';
+        statusText.textContent = 'ব্রাউজার নোটিফিকেশন সাপোর্টেড নয়।';
         statusText.style.color = 'var(--danger-color)';
         return;
     }
     if (Notification.permission === 'granted') {
-        statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশন সক্রিয় রয়েছে।';
+        statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশন অনুমতি সক্রিয় রয়েছে।';
         statusText.style.color = 'var(--success-color)';
     } else if (Notification.permission === 'denied') {
-        statusText.textContent = 'স্ট্যাটাস: পারমিশন ব্লকড! অ্যাপ সেটিংস থেকে পারমিশন অন করুন।';
+        statusText.textContent = 'স্ট্যাটাস: পারমিশন ব্লকড! ফোনের ব্রাউজার সেটিংস থেকে অন করুন।';
         statusText.style.color = 'var(--danger-color)';
     } else {
         statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশনের অনুমতি দেওয়া হয়নি।';
         statusText.style.color = 'var(--warning-color)';
+    }
+}
+
+// সরাসরি সার্ভিস ওয়ার্কার নোটিফিকেশন ফায়ারিং
+function triggerSWNotification(title, message) {
+    playNotificationSound();
+    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+            type: 'SHOW_NOTIFICATION',
+            title: title,
+            message: message
+        });
+    } else if (swRegistration) {
+        swRegistration.showNotification(title, {
+            body: message,
+            icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png',
+            vibrate: [200, 100, 200]
+        });
+    } else {
+        new Notification(title, {
+            body: message,
+            icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png'
+        });
     }
 }
 
@@ -857,15 +887,7 @@ document.getElementById('requestNotifBtn').addEventListener('click', () => {
         Notification.requestPermission().then(permission => {
             updateNotifStatusUI();
             if (permission === 'granted') {
-                playNotificationSound();
-                if (navigator.serviceWorker) {
-                    navigator.serviceWorker.ready.then(reg => {
-                        reg.showNotification('90days - স্বাগত!', {
-                            body: 'নোটিফিকেশন সফলভাবে অন হয়েছে!',
-                            icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png'
-                        });
-                    });
-                }
+                triggerSWNotification('90days - টেস্ট নোটিফিকেশন', 'আপনার নোটিফিকেশন সফলভাবে কাজ করছে!');
             }
         });
     }
@@ -885,21 +907,15 @@ async function checkNotificationTrigger() {
         const titleObj = await getStoreData('settings_store', 'notifTitle');
         const msgObj = await getStoreData('settings_store', 'notifMsg');
 
-        playNotificationSound();
-
-        if (navigator.serviceWorker) {
-            navigator.serviceWorker.ready.then(reg => {
-                reg.showNotification(titleObj ? titleObj.value : '90days', {
-                    body: msgObj ? msgObj.value : 'আজকের ট্র্যাকিং কি সম্পন্ন করেছেন?',
-                    icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png'
-                });
-            });
-        }
+        triggerSWNotification(
+            titleObj ? titleObj.value : '90days - রিমাইন্ডার',
+            msgObj ? msgObj.value : 'আজকের ট্র্যাকিং কি সম্পন্ন করেছেন?'
+        );
     }
 }
 setInterval(checkNotificationTrigger, 5000);
 
-// App Load Initialization Fix
+// App Load Initialization
 window.addEventListener('DOMContentLoaded', async () => {
     await initDB();
     await initTheme();
@@ -915,8 +931,6 @@ window.addEventListener('DOMContentLoaded', async () => {
     } catch(err) {
         console.log('Default start day fallback');
     }
-    
-    // নিশ্চিত কার্ড রেন্ডার
     renderCurrentDayCard(startDay);
 });
 </script>
