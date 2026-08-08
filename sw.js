@@ -1,16 +1,31 @@
-const CACHE_NAME = '90days-tracker-cache-v3';
+const CACHE_NAME = '90days-tracker-cache-v4';
 
-// ইনস্টলেশন ও ক্যাশিং
+// সার্ভিস ওয়ার্কার ইনস্টল ও এক্টিভেট
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// সক্রিয়করণ
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil(self.clients.claim());
 });
 
-// নোটিফিকেশনে ক্লিক করার পর অ্যাপ ওপেন করার লজিক
+// ব্যাকগ্রাউন্ড নোটিফিকেশন শো ইভেন্ট
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
+    const title = event.data.title || '90days - রিমাইন্ডার';
+    const options = {
+      body: event.data.message || 'আজকের দিনের চ্যালেঞ্জ সম্পূর্ণ করেছেন?',
+      icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png',
+      badge: 'https://onlinecdndrive.vercel.app/90dayslogo.png',
+      tag: '90days-daily-reminder',
+      renotify: true,
+      vibrate: [200, 100, 200]
+    };
+    self.registration.showNotification(title, options);
+  }
+});
+
+// নোটিফিকেশনে ক্লিক করলে অ্যাপ ওপেন
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   event.waitUntil(
@@ -22,7 +37,7 @@ self.addEventListener('notificationclick', (event) => {
         }
       }
       if (clients.openWindow) {
-        return clients.openWindow('./index.html');
+        return clients.openWindow('./');
       }
     })
   );
