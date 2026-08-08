@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>৯০ দিনের চ্যালেঞ্জ - ট্র্যাকার</title>
+    <title>90days - ৯০ দিনের চ্যালেঞ্জ ট্র্যাকার</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="https://onlinecdndrive.vercel.app/90dayslogo.png">
+    <meta name="theme-color" content="#2563eb">
     <style>
         :root {
             --bg-primary: #f4f6f9;
@@ -17,7 +19,7 @@
             --success-color: #10b981;
             --warning-color: #f59e0b;
             --danger-color: #ef4444;
-            --shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -2px rgba(0, 0, 0, 0.03);
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
             --radius: 16px;
         }
 
@@ -29,7 +31,7 @@
             --accent-color: #3b82f6;
             --accent-hover: #60a5fa;
             --card-border: #334155;
-            --shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.4);
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -63,12 +65,26 @@
 
         header {
             background-color: var(--bg-secondary);
-            padding: 12px 16px;
+            padding: 10px 14px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid var(--card-border);
+        }
+
+        .app-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            object-fit: cover;
             border: 1px solid var(--card-border);
         }
 
@@ -84,7 +100,7 @@
         }
 
         .clock-time {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: bold;
             color: var(--accent-color);
         }
@@ -100,7 +116,7 @@
             color: var(--text-primary);
             font-size: 16px;
             padding: 6px 10px;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -144,13 +160,14 @@
             margin-top: -2px;
             margin-bottom: -4px;
             user-select: none;
+            font-weight: 500;
         }
 
         /* Slide Viewport & Touch Controls */
         .slider-wrapper {
             position: relative;
             width: 100%;
-            min-height: 380px;
+            min-height: 370px;
             overflow: hidden;
             touch-action: pan-y;
             user-select: none;
@@ -211,7 +228,7 @@
             border-radius: 8px;
             font-style: italic;
             font-size: 13px;
-            line-height: 1.4;
+            line-height: 1.45;
             margin-bottom: 12px;
             border-left: 3px solid var(--warning-color);
             color: var(--text-primary);
@@ -219,7 +236,7 @@
 
         .note-area {
             width: 100%;
-            height: 100px;
+            height: 95px;
             padding: 10px;
             border-radius: 8px;
             border: 1px solid var(--card-border);
@@ -371,9 +388,12 @@
 
 <div class="container">
     <header>
-        <div class="clock-container">
-            <span class="clock-title">বর্তমান সময়</span>
-            <span class="clock-time" id="liveClock">০০:০০:০০ AM</span>
+        <div class="app-brand">
+            <img src="https://onlinecdndrive.vercel.app/90dayslogo.png" alt="90days Logo" class="app-logo" onerror="this.style.display='none'">
+            <div class="clock-container">
+                <span class="clock-title">90days - বর্তমান সময়</span>
+                <span class="clock-time" id="liveClock">০০:০০:০০ AM</span>
+            </div>
         </div>
         <div class="header-actions">
             <button class="icon-btn" id="themeToggle" title="থিম পরিবর্তন">🌙</button>
@@ -391,7 +411,7 @@
         </div>
     </div>
 
-    <div class="swipe-hint">👈 বাঁয়ে বা ডানে স্লাইড করুন 👉</div>
+    <div class="swipe-hint">👈 স্ক্রিনে হাত দিয়ে স্লাইড করুন 👉</div>
 
     <!-- Active Card Slide Viewport -->
     <div class="slider-wrapper" id="sliderWrapper">
@@ -422,7 +442,7 @@
         </div>
         <div class="form-group">
             <label for="notifTitle">নোটিফিকেশন শিরোনাম:</label>
-            <input type="text" id="notifTitle" class="form-control" value="৯০ দিনের চ্যালেঞ্জ!">
+            <input type="text" id="notifTitle" class="form-control" value="90days - আপনার নতুন দিনের শুরু!">
         </div>
         <div class="form-group">
             <label for="notifMsg">নোটিফিকেশন বার্তা:</label>
@@ -433,7 +453,7 @@
 </div>
 
 <script>
-// ৯০টি উক্তি
+// ৯০টি আলাদা মোটিভেশনাল উক্তি
 const quotes = [
     "১. সাফল্যের প্রথম ধাপ হলো শুরু করা।", "২. কঠোর পরিশ্রম কখনোই ব্যর্থ হয় না।", "৩. প্রতি সূর্যোদয় একটি নতুন সুযোগ নিয়ে আসে।",
     "৪. ছোট ছোট প্রতিদিনের পরিবর্তন বড় ফল নিয়ে আসে।", "৫. নিজেকে বিশ্বাস করো, তুমি পারবে।", "৬. আপনার সময় সীমিত, তাই অন্যের জীবন বেঁচে এটি নষ্ট করবেন না।",
@@ -464,7 +484,7 @@ const quotes = [
     "৭৯. জীবনের প্রতিটি মুহূর্ত গুরুত্বপূর্ণ।", "৮০. কাজের প্রতি একাগ্রতা আনুন।", "৮১. সাফল্য এক দিনে আসে না, তবে এক দিন ঠিকই আসে।",
     "৮২. আপনার অভ্যাসই আপনার ভবিষ্যৎ তৈরি করবে।", "৮৩. ধৈর্য ধরুন, মিষ্টি ফল পাবেন।", "৮৪. অসম্ভবকে সম্ভব করাই মানব জীবনের আনন্দ।",
     "৮৫. চিন্তাভাবনা ইতিবাচক হলে সিদ্ধান্ত সঠিক হয়।", "৮৬. সুযোগ একবারই আসে, তাকে কাজে লাগান।", "৮৭. নিজের লক্ষ্য থেকে কখনো বিচ্যুত হবেন না।",
-    "৮৮. নিজের কর্মের দায়িত্ব নিজে নিন।", "৮৯. শৃঙ্খলা হলো স্বাধীনতা পাওয়ার পথ।", "৯০. অভিনন্দন! আপনি আপনার ৯০ দিনের যাত্রা সম্পন্ন করেছেন!"
+    "৮৮. নিজের কর্মের দায়িত্ব নিজে নিন।", "৮৯. শৃঙ্খলা হলো স্বাধীনতা পাওয়ার পথ।", "৯০. অভিনন্দন! আপনি আপনার ৯০ দিনের যাত্রা সফলভাবে সম্পন্ন করেছেন!"
 ];
 
 function toBengaliNumerals(str) {
@@ -522,7 +542,7 @@ function saveStoreData(storeName, data) {
     });
 }
 
-// Clock
+// Live Clock
 function updateClock() {
     const now = new Date();
     let hours = now.getHours();
@@ -535,7 +555,7 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// Theme
+// Theme Toggle
 let currentTheme = 'light';
 async function initTheme() {
     const savedTheme = await getStoreData('settings_store', 'theme');
@@ -551,7 +571,7 @@ document.getElementById('themeToggle').addEventListener('click', async () => {
     await saveStoreData('settings_store', { key: 'theme', value: currentTheme });
 });
 
-// Render Day Card
+// Render Day Card Component
 async function renderCurrentDayCard(dayNum, slideDirection = 'none') {
     const daysData = await getAllStoreData('days_store');
     const daysMap = {};
@@ -627,21 +647,20 @@ async function renderCurrentDayCard(dayNum, slideDirection = 'none') {
     });
 }
 
-// Button Navigation
+// Navigation Controls
 window.navigateDay = function(direction) {
     const targetDay = currentViewingDay + direction;
     const slideDir = direction > 0 ? 'right' : 'left';
     renderCurrentDayCard(targetDay, slideDir);
 };
 
-// Touch / Swipe Gestures Implementation
+// Touch Gesture Implementation
 let startX = 0;
 let currentX = 0;
 let isDragging = false;
 const sliderWrapper = document.getElementById('sliderWrapper');
 
 sliderWrapper.addEventListener('touchstart', (e) => {
-    // Textarea এ ক্লিক করলে সোয়াইপ ট্রিগার বন্ধ থাকবে
     if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
     startX = e.touches[0].clientX;
     isDragging = true;
@@ -655,8 +674,7 @@ sliderWrapper.addEventListener('touchmove', (e) => {
     const diffX = currentX - startX;
     const activeCard = sliderWrapper.querySelector('.day-card.active');
     if (activeCard) {
-        // টাচ ফলো করে কার্ড সামান্য ঘোরানো এবং সরানোর স্মুথ এনিমেশন
-        activeCard.style.transform = `translateX(${diffX}px) rotate(${diffX * 0.03}deg)`;
+        activeCard.style.transform = `translateX(${diffX}px) rotate(${diffX * 0.02}deg)`;
     }
 }, { passive: true });
 
@@ -671,20 +689,19 @@ sliderWrapper.addEventListener('touchend', (e) => {
     }
 
     if (diffX < -50) {
-        // বামে সোয়াইপ -> পরের দিন
+        if (window.navigator.vibrate) window.navigator.vibrate(20);
         navigateDay(1);
     } else if (diffX > 50) {
-        // ডানে সোয়াইপ -> আগের দিন
+        if (window.navigator.vibrate) window.navigator.vibrate(20);
         navigateDay(-1);
     } else if (activeCard) {
-        // রিলিজ করলে আগের পজিশনে আসা
         activeCard.style.transform = 'translateX(0) rotate(0deg)';
     }
     startX = 0;
     currentX = 0;
 });
 
-// Logic: Edits & Auto Progress
+// Business Logic: Completion and Limits
 window.handleCompletionToggle = async function(dayNum) {
     const existing = await getStoreData('days_store', dayNum) || { dayNumber: dayNum, note: '', editCount: 0, completed: false };
     if (existing.editCount >= 3) { renderCurrentDayCard(dayNum); return; }
@@ -728,7 +745,7 @@ window.handleSaveNote = async function(dayNum) {
     }
 };
 
-// Sound Effect
+// Web Audio Bell Signal
 function playNotificationSound() {
     try {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -748,11 +765,11 @@ function playNotificationSound() {
     } catch(e){}
 }
 
-// Service Worker & Notification Settings
+// PWA Service Worker & Notification Setup
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js')
-    .then(reg => console.log('SW Registered!', reg))
-    .catch(err => console.error('SW Error:', err));
+    .then(reg => console.log('90days SW Active', reg))
+    .catch(err => console.error('SW Failed', err));
 }
 
 const settingsModal = document.getElementById('settingsModal');
@@ -782,15 +799,15 @@ document.getElementById('saveSettingsBtn').addEventListener('click', async () =>
 function updateNotifStatusUI() {
     const statusText = document.getElementById('notifStatus');
     if (!('Notification' in window)) {
-        statusText.textContent = 'ব্রাউজার নোটিফিকেশন সাপোর্টেড নয় (HTTPS প্রয়োজন)।';
+        statusText.textContent = 'ব্রাউজার নোটিফিকেশন সাপোর্টেড নয় (HTTPS সার্ভিস প্রয়োজন)।';
         statusText.style.color = 'var(--danger-color)';
         return;
     }
     if (Notification.permission === 'granted') {
-        statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশন চালু রয়েছে।';
+        statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশন সক্রিয় রয়েছে।';
         statusText.style.color = 'var(--success-color)';
     } else if (Notification.permission === 'denied') {
-        statusText.textContent = 'স্ট্যাটাস: পারমিশন ব্লকড! অ্যাপ সেটিংস থেকে অন করুন।';
+        statusText.textContent = 'স্ট্যাটাস: পারমিশন ব্লকড! অ্যাপ সেটিংস থেকে পারমিশন অন করুন।';
         statusText.style.color = 'var(--danger-color)';
     } else {
         statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশনের অনুমতি দেওয়া হয়নি।';
@@ -806,9 +823,9 @@ document.getElementById('requestNotifBtn').addEventListener('click', () => {
                 playNotificationSound();
                 if (navigator.serviceWorker) {
                     navigator.serviceWorker.ready.then(reg => {
-                        reg.showNotification('৯০ দিনের চ্যালেঞ্জ!', {
+                        reg.showNotification('90days - স্বাগত!', {
                             body: 'নোটিফিকেশন সফলভাবে অন হয়েছে!',
-                            icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+                            icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png'
                         });
                     });
                 }
@@ -835,9 +852,9 @@ async function checkNotificationTrigger() {
 
         if (navigator.serviceWorker) {
             navigator.serviceWorker.ready.then(reg => {
-                reg.showNotification(titleObj ? titleObj.value : '৯০ দিনের চ্যালেঞ্জ!', {
-                    body: msgObj ? msgObj.value : 'আজকের চ্যালেঞ্জ কি সম্পন্ন করেছেন?',
-                    icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+                reg.showNotification(titleObj ? titleObj.value : '90days', {
+                    body: msgObj ? msgObj.value : 'আজকের ট্র্যাকিং কি সম্পন্ন করেছেন?',
+                    icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png'
                 });
             });
         }
@@ -845,7 +862,7 @@ async function checkNotificationTrigger() {
 }
 setInterval(checkNotificationTrigger, 5000);
 
-// App Load
+// App Load Initialization
 window.onload = async () => {
     await initDB();
     await initTheme();
@@ -861,3 +878,4 @@ window.onload = async () => {
 </script>
 </body>
 </html>
+
