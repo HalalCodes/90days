@@ -1,25 +1,24 @@
 {
-"name": "90days Habit Tracker",
-"short_name": "90days",
-"description": "৯০ দিনের অভ্যাসের অগ্রগতি ট্র্যাক করার জন্য প্রফেশনাল অফলাইন অ্যাপ",
-"start_url": "./index.html",
-"scope": "./",
-"display": "standalone",
-"orientation": "portrait",
-"background_color": "#0f172a",
-"theme_color": "#2563eb",
-"icons": [
-{
-"src": "https://onlinecdndrive.vercel.app/90dayslogo.png",
-"sizes": "192x192",
-"type": "image/png",
-"purpose": "any maskable"
-},
-{
-"src": "https://onlinecdndrive.vercel.app/90dayslogo.png",
-"sizes": "512x512",
-"type": "image/png",
-"purpose": "any maskable"
-}
-]
+  "name": "৯০ দিনের গোল হাব",
+  "short_name": "গোল হাব",
+  "description": "ব্যক্তিগত লক্ষ্য ট্র্যাকিং এবং নোটিফিকেশন হাব",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0f19",
+  "theme_color": "#101827",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://onlinecdndrive.vercel.app/logo90days.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://onlinecdndrive.vercel.app/logo90days.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
