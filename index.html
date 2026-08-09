@@ -177,7 +177,6 @@
             font-weight: 500;
         }
 
-        /* Slide Viewport Controls */
         .slider-wrapper {
             position: relative;
             width: 100%;
@@ -336,7 +335,6 @@
             padding: 10px;
         }
 
-        /* Modal Settings */
         .modal {
             display: none;
             position: fixed;
@@ -429,12 +427,10 @@
 
     <div class="swipe-hint">👈 স্ক্রিনে হাত দিয়ে স্লাইড করুন 👉</div>
 
-    <!-- Active Card Slide Viewport -->
     <div class="slider-wrapper" id="sliderWrapper">
         <!-- ডায়নামিক স্লাইড লোড হবে -->
     </div>
 
-    <!-- নেভিগেশন বাটন -->
     <div class="nav-controls">
         <button class="btn nav-btn" id="prevDayBtn" onclick="navigateDay(-1)">← পূর্ববর্তী দিন</button>
         <button class="btn nav-btn" id="nextDayBtn" onclick="navigateDay(1)">পরবর্তী দিন →</button>
@@ -476,7 +472,6 @@ function handleLogoError() {
     if (box) box.textContent = '90d';
 }
 
-// ৯০টি আলাদা উক্তি
 const quotes = [
     "১. সাফল্যের প্রথম ধাপ হলো শুরু করা।", "২. কঠোর পরিশ্রম কখনোই ব্যর্থ হয় না।", "৩. প্রতি সূর্যোদয় একটি নতুন সুযোগ নিয়ে আসে।",
     "৪. ছোট ছোট প্রতিদিনের পরিবর্তন বড় ফল নিয়ে আসে।", "৫. নিজেকে বিশ্বাস করো, তুমি পারবে।", "৬. আপনার সময় সীমিত, তাই অন্যের জীবন বেঁচে এটি নষ্ট করবেন না।",
@@ -802,18 +797,34 @@ function playNotificationSound() {
     } catch(e){}
 }
 
-// Fixed Relative Service Worker Registration for GitHub Pages
+// Service Worker Registration
 let swRegistration = null;
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js', { scope: './' })
         .then(reg => {
             swRegistration = reg;
-            console.log('90days SW Active on GitHub Pages Scope:', reg.scope);
+            console.log('90days SW Registered', reg.scope);
             updateNotifStatusUI();
+            syncScheduledNotificationWithSW();
         })
-        .catch(err => console.error('SW Registration Failed:', err));
+        .catch(err => console.error('SW Failed:', err));
     });
+}
+
+async function syncScheduledNotificationWithSW() {
+    const notifTime = await getStoreData('settings_store', 'notifTime');
+    const titleObj = await getStoreData('settings_store', 'notifTitle');
+    const msgObj = await getStoreData('settings_store', 'notifMsg');
+
+    if (notifTime && navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+            type: 'SCHEDULE_NOTIFICATION',
+            time: notifTime.value,
+            title: titleObj ? titleObj.value : '90days - রিমাইন্ডার',
+            message: msgObj ? msgObj.value : 'আজকের চ্যালেঞ্জ কি পূরণ করেছেন?'
+        });
+    }
 }
 
 const settingsModal = document.getElementById('settingsModal');
@@ -836,6 +847,8 @@ document.getElementById('saveSettingsBtn').addEventListener('click', async () =>
     await saveStoreData('settings_store', { key: 'notifTime', value: document.getElementById('notifTime').value });
     await saveStoreData('settings_store', { key: 'notifTitle', value: document.getElementById('notifTitle').value });
     await saveStoreData('settings_store', { key: 'notifMsg', value: document.getElementById('notifMsg').value });
+    
+    await syncScheduledNotificationWithSW();
     alert('সেটিংস সংরক্ষণ করা হয়েছে!');
     settingsModal.classList.remove('open');
 });
@@ -851,7 +864,7 @@ function updateNotifStatusUI() {
         statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশন অনুমতি সক্রিয় রয়েছে।';
         statusText.style.color = 'var(--success-color)';
     } else if (Notification.permission === 'denied') {
-        statusText.textContent = 'স্ট্যাটাস: পারমিশন ব্লকড! ফোনের ব্রাউজার সেটিংস থেকে অন করুন।';
+        statusText.textContent = 'স্ট্যাটাস: পারমিশন ব্লকড! ব্রাউজার সেটিংস থেকে অন করুন।';
         statusText.style.color = 'var(--danger-color)';
     } else {
         statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশনের অনুমতি দেওয়া হয়নি।';
@@ -859,7 +872,6 @@ function updateNotifStatusUI() {
     }
 }
 
-// সরাসরি সার্ভিস ওয়ার্কার নোটিফিকেশন ফায়ারিং
 function triggerSWNotification(title, message) {
     playNotificationSound();
     if (navigator.serviceWorker && navigator.serviceWorker.controller) {
@@ -873,11 +885,6 @@ function triggerSWNotification(title, message) {
             body: message,
             icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png',
             vibrate: [200, 100, 200]
-        });
-    } else {
-        new Notification(title, {
-            body: message,
-            icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png'
         });
     }
 }
@@ -915,7 +922,7 @@ async function checkNotificationTrigger() {
 }
 setInterval(checkNotificationTrigger, 5000);
 
-// App Load Initialization
+// Load App
 window.addEventListener('DOMContentLoaded', async () => {
     await initDB();
     await initTheme();
@@ -928,12 +935,9 @@ window.addEventListener('DOMContentLoaded', async () => {
         for (let i = 1; i <= 90; i++) {
             if (!daysMap[i] || !daysMap[i].completed) { startDay = i; break; }
         }
-    } catch(err) {
-        console.log('Default start day fallback');
-    }
+    } catch(err) {}
     renderCurrentDayCard(startDay);
 });
 </script>
 </body>
 </html>
-
