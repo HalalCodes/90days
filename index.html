@@ -1,927 +1,424 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="bn" data-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>90days - ৯০ দিনের চ্যালেঞ্জ ট্র্যাকার</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>৯০ দিনের গোল হাব</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#101827">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="https://onlinecdndrive.vercel.app/90dayslogo.png">
-    <meta name="theme-color" content="#2563eb">
-    <style>
-        :root {
-            --bg-primary: #f4f6f9;
-            --bg-secondary: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --accent-color: #2563eb;
-            --accent-hover: #1d4ed8;
-            --card-border: #e2e8f0;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-            --radius: 16px;
-        }
+    <link rel="icon" type="image/png" href="assets/logo90days.png" id="appIcon">
+    <link rel="apple-touch-icon" href="assets/logo90days.png">
 
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --accent-color: #3b82f6;
-            --accent-hover: #60a5fa;
-            --card-border: #334155;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
-        }
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.3s, color 0.3s;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-            touch-action: pan-y;
-        }
-
-        .container {
-            max-width: 480px;
-            width: 100%;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        header {
-            background-color: var(--bg-secondary);
-            padding: 10px 14px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid var(--card-border);
-        }
-
-        .app-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .app-logo-box {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #2563eb, #3b82f6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        .app-logo-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .clock-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .clock-title {
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-weight: 600;
-        }
-
-        .clock-time {
-            font-size: 15px;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: 1px solid var(--card-border);
-            color: var(--text-primary);
-            font-size: 16px;
-            padding: 6px 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .progress-card {
-            background-color: var(--bg-secondary);
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--card-border);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .progress-bar-bg {
-            background-color: var(--card-border);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            background-color: var(--accent-color);
-            height: 100%;
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-
-        .swipe-hint {
-            text-align: center;
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: -2px;
-            margin-bottom: -4px;
-            user-select: none;
-            font-weight: 500;
-        }
-
-        .slider-wrapper {
-            position: relative;
-            width: 100%;
-            min-height: 370px;
-            overflow: hidden;
-            touch-action: pan-y;
-            user-select: none;
-        }
-
-        .day-card {
-            background-color: var(--bg-secondary);
-            border-radius: var(--radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--card-border);
-            width: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            pointer-events: none;
-            transform: translateX(100%);
-            transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease;
-            will-change: transform, opacity;
-        }
-
-        .day-card.active {
-            position: relative;
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateX(0);
-        }
-
-        .day-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .day-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .badge {
-            font-size: 11px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-
-        .badge-active { background: #dbeafe; color: #1e40af; }
-        .badge-completed { background: #d1fae5; color: #065f46; }
-
-        [data-theme="dark"] .badge-active { background: #1e3a8a; color: #93c5fd; }
-        [data-theme="dark"] .badge-completed { background: #064e3b; color: #a7f3d0; }
-
-        .quote-box {
-            background-color: var(--bg-primary);
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-style: italic;
-            font-size: 13px;
-            line-height: 1.45;
-            margin-bottom: 12px;
-            border-left: 3px solid var(--warning-color);
-            color: var(--text-primary);
-        }
-
-        .note-area {
-            width: 100%;
-            height: 95px;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid var(--card-border);
-            background-color: var(--bg-secondary);
-            color: var(--text-primary);
-            resize: none;
-            font-size: 13px;
-            margin-bottom: 12px;
-            outline: none;
-        }
-
-        .note-area:focus {
-            border-color: var(--accent-color);
-        }
-
-        .note-area:disabled {
-            background-color: var(--bg-primary);
-            cursor: not-allowed;
-            opacity: 0.7;
-        }
-
-        .card-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .action-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .edit-info {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s, opacity 0.2s;
-            font-size: 13px;
-        }
-
-        .btn:hover { background-color: var(--accent-hover); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .btn-success { background-color: var(--success-color); }
-        .btn-success:hover { background-color: #059669; }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            user-select: none;
-        }
-
-        .checkbox-container input {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-            accent-color: var(--success-color);
-        }
-
-        .nav-controls {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .nav-btn {
-            flex: 1;
-            padding: 10px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-
-        .modal.open { display: flex; }
-
-        .modal-content {
-            background-color: var(--bg-secondary);
-            padding: 20px;
-            border-radius: var(--radius);
-            max-width: 400px;
-            width: 100%;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--card-border);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid var(--card-border);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            outline: none;
-            font-size: 13px;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            color: var(--text-primary);
-            cursor: pointer;
-        }
-    </style>
+    <!-- OneSignal Web Push SDK -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <div class="app-brand">
-            <div class="app-logo-box" id="logoBox">
-                <img src="https://onlinecdndrive.vercel.app/90dayslogo.png" alt="90" class="app-logo-img" id="logoImg" onerror="handleLogoError()">
+    <!-- App Container -->
+    <div id="app" class="app-container">
+
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-brand">
+                <img src="https://onlinecdndrive.vercel.app/logo90days.png" alt="Logo" class="header-logo" id="headerLogoImg" onerror="this.src='assets/logo90days.png'">
+                <div>
+                    <h1 class="app-title">৯০ দিনের গোল হাব</h1>
+                    <span class="online-status" id="onlineStatus">
+                        <span class="status-dot online"></span> অনলাইন
+                    </span>
+                </div>
             </div>
-            <div class="clock-container">
-                <span class="clock-title">90days - বর্তমান সময়</span>
-                <span class="clock-time" id="liveClock">০০:০০:০০ AM</span>
-            </div>
-        </div>
-        <div class="header-actions">
-            <button class="icon-btn" id="themeToggle" title="থিম পরিবর্তন">🌙</button>
-            <button class="icon-btn" id="settingsOpen" title="সেটিংস">⚙️</button>
-        </div>
-    </header>
-
-    <div class="progress-card">
-        <div class="progress-header">
-            <span>৯০ দিনের অগ্রগতি</span>
-            <span id="progressText">০/৯০ দিন (০%)</span>
-        </div>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progressBar"></div>
-        </div>
-    </div>
-
-    <div class="swipe-hint">👈 স্ক্রিনে হাত দিয়ে স্লাইড করুন 👉</div>
-
-    <div class="slider-wrapper" id="sliderWrapper">
-        <!-- ডায়নামিক স্লাইড লোড হবে -->
-    </div>
-
-    <div class="nav-controls">
-        <button class="btn nav-btn" id="prevDayBtn" onclick="navigateDay(-1)">← পূর্ববর্তী দিন</button>
-        <button class="btn nav-btn" id="nextDayBtn" onclick="navigateDay(1)">পরবর্তী দিন →</button>
-    </div>
-</div>
-
-<!-- Settings Modal -->
-<div class="modal" id="settingsModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>নোটিফিকেশন সেটিংস</h3>
-            <button class="close-btn" id="settingsClose">&times;</button>
-        </div>
-        <div class="form-group">
-            <button class="btn" id="requestNotifBtn" style="width:100%; margin-bottom: 8px;">অনুমতি দিন ও টেস্ট নোটিফিকেশন পাঠান</button>
-            <p id="notifStatus" style="font-size:11px; text-align:center;"></p>
-        </div>
-        <div class="form-group">
-            <label for="notifTime">দৈনিক রিমাইন্ডার সময়:</label>
-            <input type="time" id="notifTime" class="form-control" value="18:00">
-        </div>
-        <div class="form-group">
-            <label for="notifTitle">নোটিফিকেশন শিরোনাম:</label>
-            <input type="text" id="notifTitle" class="form-control" value="90days - আপনার নতুন দিনের শুরু!">
-        </div>
-        <div class="form-group">
-            <label for="notifMsg">নোটিফিকেশন বার্তা:</label>
-            <textarea id="notifMsg" class="form-control" rows="2">আজকের দিনের ট্র্যাকিং ও নোট কি পূরণ করেছ? এখনই চেক করো!</textarea>
-        </div>
-        <button class="btn btn-success" id="saveSettingsBtn" style="width: 100%;">সংরক্ষণ করুন</button>
-    </div>
-</div>
-
-<script>
-function handleLogoError() {
-    const img = document.getElementById('logoImg');
-    if (img) img.style.display = 'none';
-    const box = document.getElementById('logoBox');
-    if (box) box.textContent = '90d';
-}
-
-const quotes = [
-    "১. সাফল্যের প্রথম ধাপ হলো শুরু করা।", "২. কঠোর পরিশ্রম কখনোই ব্যর্থ হয় না।", "৩. প্রতি সূর্যোদয় একটি নতুন সুযোগ নিয়ে আসে।",
-    "৪. ছোট ছোট প্রতিদিনের পরিবর্তন বড় ফল নিয়ে আসে।", "৫. নিজেকে বিশ্বাস করো, তুমি পারবে।", "৬. আপনার সময় সীমিত, তাই অন্যের জীবন বেঁচে এটি নষ্ট করবেন না।",
-    "৭. বাধা হলো সেই ভয়ংকর জিনিস, যা লক্ষ্য থেকে চোখ সরালে দেখা যায়।", "৮. বড় স্বপ্নের সূচনা ছোট পদক্ষেপ দিয়েই হয়।", "৯. গতকাল থেকে শিখুন, আজকের জন্য বাঁচুন।",
-    "১০. ধৈর্য ও একাগ্রতা সাফল্যের চাবিকাঠি।", "১১. আপনি যা করতে ভালোবাসেন, সেটাই করুন।", "১২. চেষ্টার কখনো মৃত্যু নেই।",
-    "১৩. ভালো কিছু সময় নেয়, অধৈর্য হবেন না।", "১৪. কঠিন সময় স্থায়ী হয় না, কিন্তু শক্তিশালী মানুষ স্থায়ী হয়।", "১৫. নিজের সেরাটা দেওয়ার চেষ্টা চালিয়ে যান।",
-    "১৬. প্রতিটি ভুল একটি নতুন শিক্ষা।", "১৭. উড়তে না পারলে দৌড়ান, দৌড়াতে না পারলে হাঁটুন।", "১৮. অলসতা হলো উন্নতির প্রধান শত্রু।",
-    "১৯. নিজের লক্ষ্য স্থির রাখুন এবং এগিয়ে যান।", "২০. যা হারিয়ে গেছে তা ভেবে সময় নষ্ট করবেন না।", "২১. পরিশ্রমের কোনো বিকল্প নেই।",
-    "২২. আপনার চিন্তা যত বড় হবে, আপনার অর্জন তত বড় হবে।", "২৩. আপনি যা আজ করছেন, তা আপনার ভবিষ্যৎ নির্ধারণ করবে।", "২৪. নিজেকে অন্য কারো সাথে তুলনা করবেন না।",
-    "২৫. জয়ের আনন্দ তখনই পাওয়া যায় যখন পরাজয়ের ভয় থাকে না।", "২৬. জ্ঞানই শক্তি, তবে প্রয়োগই হলো সাফল্য।", "২৭. একাগ্রতাই হলো সাফল্যের গোপন রেসিপি।",
-    "২৮. অসম্ভব শব্দটি কেবল মূর্খদের অভিধানেই পাওয়া যায়।", "২৯. প্রতিটি নতুন দিন একটি নতুন যুদ্ধের মতো।", "৩০. সুযোগের অপেক্ষায় না থেকে নিজে সুযোগ তৈরি করুন।",
-    "৩১. প্রতিটি সূর্যোদয়ে নতুন আশা থাকে।", "৩২. আপনার ইচ্ছাশক্তিই আপনার বড় শক্তি।", "৩৩. কাজ শুরুর সঠিক সময় হলো 'এখন'।",
-    "৩৪. সফল ব্যক্তিরা ভিন্ন কাজ করে না, তারা কাজগুলো ভিন্নভাবে করে।", "৩৫. নিজের কাজের প্রতি সৎ থাকুন।", "৩৬. নেতিবাচক চিন্তা দূর করুন, ইতিবাচক থাকুন।",
-    "৩৭. শৃঙ্খলাই হলো লক্ষ্য এবং অর্জনের মাঝের সেতু।", "৩৮. সময় কারো জন্য অপেক্ষা করে না।", "৩৯. ঝুঁকি না নিলে কখনো বড় কিছু শেখা যায় না।",
-    "৪০. ব্যর্থতা হলো সাফল্যের প্রথম ধাপ।", "৪১. মনে রাখুন, অন্ধকারের পরেই আলো আসে।", "৪২. স্বপ্ন সত্যি করতে হলে আগে স্বপ্ন দেখতে হবে।",
-    "৪৩. নিজেকে প্রতিনিয়ত আপডেট রাখুন।", "৪৪. কাজ করে যান, ফলাফল স্বয়ংক্রিয়ভাবে আসবে।", "৪৫. আজকের আত্মত্যাগ আগামীকালের সাফল্য এনে দেবে।",
-    "৪৬. শান্ত থাকুন এবং নিজের কাজ করে যান।", "৪৭. আপনার মনকে সব অবস্থায় ইতিবাচক রাখতে শিখুন।", "৪৮. ভয়কে জয় করাই হলো সত্যিকারের বীরত্ব।",
-    "৪৯. প্রতিদিন নিজেকে আগের দিনের চেয়ে ১% উন্নত করুন।", "৫০. কখনোই HAL ছেড়ে দেবেন না।", "৫১. সাফল্য কোনো দুর্ঘটনা নয়, এটি কঠোর পরিশ্রমের ফল।",
-    "৫২. দৃষ্টিভঙ্গি পরিবর্তন করুন, জীবন বদলে যাবে।", "৫৩. আপনার সীমাবদ্ধতা কেবল আপনার মনের ভেতরে।", "৫৪. কাজ করার সঠিক মনোভাব সব বাধা দূর করে।",
-    "৫৫. প্রতিটি ছোট অর্জন উদযাপন করুন।", "৫৬. নতুন কিছু শিখতে কখনো দ্বিধা করবেন না।", "৫৭. মন স্থির থাকলে যেকোনো কঠিন কাজ সহজ হয়।",
-    "৫৮. সময়কে মূল্য দিন, সময় আপনাকে মূল্য দেবে।", "৫৯. আত্মবিশ্বাস সাফল্যের অর্ধেক।", "৬০. আপনি যেখানে আছেন সেখান থেকেই শুরু করুন।",
-    "৬১. জীবনের মূল চাবিকাঠি হলো ধারাবাহিকতা।", "৬২. বড় কিছু পেতে হলে ত্যাগ স্বীকার করতে হয়।", "৬৩. কোনো কাজই ছোট নয়।",
-    "৬৪. নিজের প্রতি সৎ থাকাটাই বড় বিষয়।", "৬৫. নিজের ভুল থেকে শিক্ষা গ্রহণ করুন।", "৬৬. মনোযোগ ধরে রাখাই বিজয়ের মূল।", "৬৭. আজকের কাজ আজই শেষ করুন।",
-    "৬৮. সাফল্য তাদেরই আসে যারা এর জন্য অপেক্ষা করে না।", "৬৯. কঠিন পরিশ্রমের কোনো শর্টকাট নেই।", "৭০. প্রতিটি সমস্যার অন্তরালে একটি সুযোগ লুকিয়ে থাকে।",
-    "৭১. যা করেছেন তার চেয়ে কি করতে পারেন তা নিয়ে ভাবুন।", "৭২. মানসিক শক্তিই মানুষকে শীর্ষে নিয়ে যায়।", "৭৩. সময়ের সঠিক ব্যবহার জীবনের মোড় ঘুরিয়ে দেয়।",
-    "৭৪. ইতিবাচক মানুষের সাথে সময় কাটান।", "৭৫. স্বপ্ন দেখুন এবং তা বাস্তবায়নে ঝাঁপিয়ে পড়ুন।", "৭৬. আপনার জীবনের গল্পটি আপনিই লিখবেন।",
-    "৭৭. প্রতিদিন নতুন কিছু করার চেষ্টা করুন।", "৭৮. নিজেকে সবসময় অনুপ্রাণিত রাখুন।", "৭৯. জীবনের প্রতিটি মুহূর্ত গুরুত্বপূর্ণ।",
-    "৮০. কাজের প্রতি একাগ্রতা আনুন।", "৮১. সাফল্য এক দিনে আসে না, তবে এক দিন ঠিকই আসে।", "৮২. আপনার অভ্যাসই আপনার ভবিষ্যৎ তৈরি করবে।",
-    "৮৩. ধৈর্য ধরুন, মিষ্টি ফল পাবেন।", "৮৪. অসম্ভবকে সম্ভব করাই মানব জীবনের আনন্দ।", "৮৫. চিন্তাভাবনা ইতিবাচক হলে সিদ্ধান্ত সঠিক হয়।",
-    "৮৬. সুযোগ একবারই আসে, তাকে কাজে লাগান।", "৮৭. নিজের লক্ষ্য থেকে কখনো বিচ্যুত হবেন না।", "৮৮. নিজের কর্মের দায়িত্ব নিজে নিন।",
-    "৮৯. শৃঙ্খলা হলো স্বাধীনতা পাওয়ার পথ।", "৯০. অভিনন্দন! আপনি আপনার ৯০ দিনের যাত্রা সফলভাবে সম্পন্ন করেছেন!"
-];
-
-function toBengaliNumerals(str) {
-    const en = ['0','1','2','3','4','5','6','7','8','9'];
-    const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-    return str.toString().split('').map(c => {
-        const idx = en.indexOf(c);
-        return idx > -1 ? bn[idx] : c;
-    }).join('');
-}
-
-// Database Setup
-const DB_NAME = '90DaysHabitDB';
-const DB_VERSION = 1;
-let db = null;
-let currentViewingDay = 1;
-
-function initDB() {
-    return new Promise((resolve) => {
-        try {
-            const request = indexedDB.open(DB_NAME, DB_VERSION);
-            request.onupgradeneeded = (e) => {
-                db = e.target.result;
-                if (!db.objectStoreNames.contains('days_store')) db.createObjectStore('days_store', { keyPath: 'dayNumber' });
-                if (!db.objectStoreNames.contains('settings_store')) db.createObjectStore('settings_store', { keyPath: 'key' });
-            };
-            request.onsuccess = (e) => { db = e.target.result; resolve(db); };
-            request.onerror = (e) => { console.error('DB Error', e); resolve(null); };
-        } catch(err) {
-            console.error('IndexedDB Exception', err);
-            resolve(null);
-        }
-    });
-}
-
-function getStoreData(storeName, key) {
-    return new Promise((resolve) => {
-        if (!db) { resolve(null); return; }
-        try {
-            const tx = db.transaction(storeName, 'readonly');
-            const req = tx.objectStore(storeName).get(key);
-            req.onsuccess = () => resolve(req.result);
-            req.onerror = () => resolve(null);
-        } catch(e) { resolve(null); }
-    });
-}
-
-function getAllStoreData(storeName) {
-    return new Promise((resolve) => {
-        if (!db) { resolve([]); return; }
-        try {
-            const tx = db.transaction(storeName, 'readonly');
-            const req = tx.objectStore(storeName).getAll();
-            req.onsuccess = () => resolve(req.result || []);
-            req.onerror = () => resolve([]);
-        } catch(e) { resolve([]); }
-    });
-}
-
-function saveStoreData(storeName, data) {
-    return new Promise((resolve) => {
-        if (!db) { resolve(false); return; }
-        try {
-            const tx = db.transaction(storeName, 'readwrite');
-            tx.objectStore(storeName).put(data);
-            tx.oncomplete = () => resolve(true);
-            tx.onerror = () => resolve(false);
-        } catch(e) { resolve(false); }
-    });
-}
-
-// Live Clock
-function updateClock() {
-    const now = new Date();
-    let hours = now.getHours();
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    document.getElementById('liveClock').textContent = `${toBengaliNumerals(String(hours).padStart(2, '0'))}:${toBengaliNumerals(minutes)}:${toBengaliNumerals(seconds)} ${ampm}`;
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// Theme
-let currentTheme = 'light';
-async function initTheme() {
-    const savedTheme = await getStoreData('settings_store', 'theme');
-    if (savedTheme) currentTheme = savedTheme.value;
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    document.getElementById('themeToggle').textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-}
-
-document.getElementById('themeToggle').addEventListener('click', async () => {
-    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    document.getElementById('themeToggle').textContent = currentTheme === 'dark' ? '☀️' : '🌙';
-    await saveStoreData('settings_store', { key: 'theme', value: currentTheme });
-});
-
-// Render Day Card
-async function renderCurrentDayCard(dayNum, slideDirection = 'none') {
-    const daysData = await getAllStoreData('days_store');
-    const daysMap = {};
-    let completedCount = 0;
-    daysData.forEach(d => {
-        daysMap[d.dayNumber] = d;
-        if (d.completed) completedCount++;
-    });
-
-    let maxUnlockedDay = 1;
-    for (let i = 1; i <= 90; i++) {
-        if (!daysMap[i] || !daysMap[i].completed) { maxUnlockedDay = i; break; }
-        if (i === 90 && daysMap[90]?.completed) maxUnlockedDay = 90;
-    }
-
-    if (dayNum < 1) dayNum = 1;
-    if (dayNum > maxUnlockedDay) dayNum = maxUnlockedDay;
-    currentViewingDay = dayNum;
-
-    const percent = Math.round((completedCount / 90) * 100);
-    document.getElementById('progressBar').style.width = percent + '%';
-    document.getElementById('progressText').textContent = `${toBengaliNumerals(completedCount)}/৯০ দিন (${toBengaliNumerals(percent)}%)`;
-
-    document.getElementById('prevDayBtn').disabled = (currentViewingDay <= 1);
-    document.getElementById('nextDayBtn').disabled = (currentViewingDay >= maxUnlockedDay);
-
-    const sliderWrapper = document.getElementById('sliderWrapper');
-    const dayInfo = daysMap[dayNum] || { dayNumber: dayNum, completed: false, note: '', editCount: 0 };
-    const maxEditReached = (dayInfo.editCount >= 3);
-
-    const newCard = document.createElement('div');
-    newCard.className = 'day-card';
-    if (slideDirection === 'right') newCard.style.transform = 'translateX(100%)';
-    else if (slideDirection === 'left') newCard.style.transform = 'translateX(-100%)';
-
-    let badgeText = dayInfo.completed ? 'সম্পন্ন' : 'চলতি দিন';
-    let badgeClass = dayInfo.completed ? 'badge-completed' : 'badge-active';
-
-    newCard.innerHTML = `
-        <div class="day-header">
-            <span class="day-title">দিন ${toBengaliNumerals(dayNum)}</span>
-            <span class="badge ${badgeClass}">${badgeText}</span>
-        </div>
-        <div class="quote-box">${quotes[dayNum - 1] || 'উক্তি লোড হচ্ছে...'}</div>
-        <textarea class="note-area" id="noteInput" placeholder="আজকের অভিজ্ঞতা এবং চিন্তাভাবনা লিখুন..." ${maxEditReached ? 'disabled' : ''}>${dayInfo.note || ''}</textarea>
-        <div class="card-actions">
-            <div class="action-row">
-                <label class="checkbox-container">
-                    <input type="checkbox" id="checkBtn" ${dayInfo.completed ? 'checked' : ''} ${maxEditReached ? 'disabled' : ''} onchange="handleCompletionToggle(${dayNum})">
-                    সম্পন্ন হয়েছে
-                </label>
-                <span class="edit-info">এডিট: ${toBengaliNumerals(dayInfo.editCount)}/৩</span>
-            </div>
-            <button class="btn btn-success" style="width:100%;" onclick="handleSaveNote(${dayNum})" ${maxEditReached ? 'disabled' : ''}>
-                ${maxEditReached ? 'এডিট সীমা শেষ (৩/৩)' : 'নোট সেভ করুন'}
+            <button class="icon-btn" id="quickAddBtn" title="নতুন নোট লিখুন">
+                ➕
             </button>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Section 1: Home Dashboard -->
+            <section id="view-home" class="view-panel active">
+                <!-- Goal Progress Hero Card -->
+                <div class="card hero-card">
+                    <div class="hero-top">
+                        <span class="badge" id="goalDayBadge">দিন ১</span>
+                        <span class="hero-remaining" id="goalRemainingBadge">৮৯ দিন বাকি</span>
+                    </div>
+                    <div class="hero-title-group">
+                        <h2 class="hero-title" id="goalTitleDisplay">লক্ষ্যের যাত্রা চলছে...</h2>
+                        <p class="hero-sub" id="goalDatesDisplay">শুরু: -- | শেষ: --</p>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress-box">
+                        <div class="progress-header">
+                            <span>অগ্রগতি</span>
+                            <span id="progressPercent">০%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" id="triggerCooldownBtn">
+                            ⏱️ অ্যাকশন সম্পন্ন করুন (৩ মি. কুলডাউন)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Daily Motivational Notes Slider -->
+                <div class="section-header">
+                    <h3>💡 আজকের অনুপ্রেরণা</h3>
+                </div>
+                <div class="card motivation-card">
+                    <div class="slider-container" id="motivationSlider">
+                        <div class="slide-item active">
+                            <p class="motivation-text">"প্রতিটি নতুন দিন হলো নতুন লক্ষ্য অর্জনের একটি সুযোগ।"</p>
+                            <span class="motivation-meta">দৈনিক মোট মোটিভেশনাল নোটস সংযুক্ত করুন</span>
+                        </div>
+                    </div>
+                    <div class="slider-dots" id="sliderDots">
+                        <span class="dot active"></span>
+                    </div>
+                </div>
+
+                <!-- Quick Dashboard Navigation Grid -->
+                <div class="grid-actions">
+                    <div class="action-card" onclick="app.navigateTo('notes')">
+                        <span class="action-icon">📝</span>
+                        <div class="action-info">
+                            <h4>আমার নোট</h4>
+                            <p id="noteCountText">০ টি নোট</p>
+                        </div>
+                    </div>
+                    <div class="action-card" onclick="app.navigateTo('notifications')">
+                        <span class="action-icon">🔔</span>
+                        <div class="action-info">
+                            <h4>নোটিফিকেশন</h4>
+                            <p id="notifCountText">০ টি নোটিফিকেশন</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Notes Management -->
+            <section id="view-notes" class="view-panel">
+                <div class="section-header flex-between">
+                    <h2>📝 আমার নোট</h2>
+                    <button class="btn btn-secondary btn-sm" id="addNewNoteBtn">
+                        ➕ নতুন নোট
+                    </button>
+                </div>
+
+                <!-- Filter / Tabs -->
+                <div class="tab-pills">
+                    <button class="tab-pill active" data-filter="all">সব নোট</button>
+                    <button class="tab-pill" data-filter="daily">দৈনিক স্লাইডার</button>
+                    <button class="tab-pill" data-filter="archived">আর্কাইভ</button>
+                </div>
+
+                <!-- Notes List -->
+                <div id="notesList" class="cards-list">
+                    <!-- Dynamic Notes Loaded Here -->
+                </div>
+            </section>
+
+            <!-- Section 3: Notification Manager -->
+            <section id="view-notifications" class="view-panel">
+                <div class="section-header flex-between">
+                    <h2>🔔 নোটিফিকেশন ম্যানেজার</h2>
+                    <button class="btn btn-secondary btn-sm" id="addNewNotifBtn">
+                        ➕ নতুন নোটিফিকেশন
+                    </button>
+                </div>
+
+                <!-- Permission Status Alert Banner -->
+                <div class="alert-box" id="notifPermissionBanner">
+                    <div class="alert-icon">⚠️</div>
+                    <div class="alert-content">
+                        <strong id="permStatusTitle">অনুমতি প্রয়োজন</strong>
+                        <p id="permStatusDesc">সঠিক সময়ে রিমাইন্ডার পেতে নোটিফিকেশন অ্যাক্সেস দিন।</p>
+                    </div>
+                    <button class="btn btn-primary btn-sm" id="requestPermBtn">অনুমতি দিন</button>
+                </div>
+
+                <!-- Scheduled Notifications List -->
+                <div id="notificationsList" class="cards-list">
+                    <!-- Dynamic Notifications Rendered Here -->
+                </div>
+            </section>
+
+            <!-- Section 4: Goal Engine Setup & Management -->
+            <section id="view-goal" class="view-panel">
+                <div class="section-header">
+                    <h2>🎯 গোল কনফিগারেশন</h2>
+                </div>
+
+                <div class="card">
+                    <form id="goalSettingsForm">
+                        <div class="form-group">
+                            <label>লক্ষ্যের সময়কাল নির্বাচন করুন</label>
+                            <select id="goalDurationSelect" class="form-control">
+                                <option value="7">৭ দিন</option>
+                                <option value="10">১০ দিন</option>
+                                <option value="21">২১ দিন</option>
+                                <option value="30">৩০ দিন</option>
+                                <option value="60">৬০ দিন</option>
+                                <option value="90" selected>৯০ দিন</option>
+                                <option value="100">১০০ দিন</option>
+                                <option value="120">১২০ দিন</option>
+                                <option value="180">১৮০ দিন</option>
+                                <option value="365">৩৬৫ দিন</option>
+                                <option value="custom">নিজের সময়কাল নির্ধারণ করুন...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group hidden" id="customDaysGroup">
+                            <label>কাস্টম দিন সংখ্যা লিখুন</label>
+                            <input type="number" id="customDaysInput" class="form-control" placeholder="যেমন: ৪৫" min="1" max="1000">
+                        </div>
+
+                        <div class="form-group">
+                            <label>শুরুর পদ্ধতি</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="startMode" value="today" checked>
+                                    <span>আজ থেকে নতুন করে শুরু করব</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="startMode" value="past">
+                                    <span>আমি কয়েকদিন আগে থেকেই শুরু করেছি</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group hidden" id="pastDatePickerGroup">
+                            <label>আপনার শুরুর তারিখ নির্বাচন করুন</label>
+                            <input type="date" id="pastStartDateInput" class="form-control">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-full">
+                            💾 লক্ষ্য আপডেট করুন
+                        </button>
+                    </form>
+                </div>
+
+                <div class="card warning-card">
+                    <h3>⚠️ লক্ষ্য রিসেট</h3>
+                    <p>নতুন লক্ষ্য শুরু করলে আপনার চলমান লক্ষ্যের অগ্রগতি রিসেট হয়ে যাবে।</p>
+                    <button class="btn btn-danger w-full mt-2" id="resetGoalBtn">
+                        🔄 নতুন লক্ষ্য শুরু করুন (রিসেট)
+                    </button>
+                </div>
+            </section>
+
+            <!-- Section 5: Settings -->
+            <section id="view-settings" class="view-panel">
+                <div class="section-header">
+                    <h2>⚙️ সেটিংস ও কনফিগারেশন</h2>
+                </div>
+
+                <!-- OneSignal Config Box -->
+                <div class="card">
+                    <h3>📡 OneSignal পুশ সেটআপ</h3>
+                    <div class="sec-warning">
+                        <small>⚠️ সতর্কতা: এই API Key ব্রাউজারে লোকালি (IndexedDB) অত্যন্ত নিরাপদে সংরক্ষণ করা হবে। এটি কোনো সার্ভারে আপলোড হয় না।</small>
+                    </div>
+
+                    <form id="oneSignalConfigForm" class="mt-2">
+                        <div class="form-group">
+                            <label>OneSignal App ID</label>
+                            <input type="text" id="oneSignalAppId" class="form-control" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required>
+                        </div>
+                        <div class="form-group">
+                            <label>OneSignal REST API Key</label>
+                            <input type="password" id="oneSignalApiKey" class="form-control" placeholder="os_v2_app_xxxxxxxx..." required>
+                        </div>
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">সংরক্ষণ করুন</button>
+                            <button type="button" class="btn btn-secondary" id="testOneSignalConnBtn">সংযোগ পরীক্ষা করুন</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Appearance & Theme -->
+                <div class="card">
+                    <h3>🎨 চেহারা (থিম)</h3>
+                    <div class="form-group">
+                        <select id="themeSelect" class="form-control">
+                            <option value="dark">অন্ধকার (Dark Mode)</option>
+                            <option value="light">হালকা (Light Mode)</option>
+                            <option value="system">সিস্টেম থিম অনুযায়ী</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Backup & Restore -->
+                <div class="card">
+                    <h3>💾 ব্যাকআপ ও পুনরুদ্ধার</h3>
+                    <p class="text-sm">আপনার গোল, নোট এবং নোটিফিকেশন কনফিগারেশনের একটি নিরাপদ JSON ব্যাকআপ রাখুন।</p>
+                    
+                    <div class="btn-group mt-2">
+                        <button class="btn btn-secondary" id="exportBackupBtn">
+                            📥 ব্যাকআপ তৈরি করুন
+                        </button>
+                        <button class="btn btn-secondary" id="importBackupTrigger">
+                            📤 পুনরুদ্ধার করুন
+                        </button>
+                        <input type="file" id="importBackupFile" accept=".json" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="card danger-card">
+                    <h3>🗑️ সব ডেটা মুছে ফেলুন</h3>
+                    <p class="text-sm">লোকাল ডেটাবেসের সমস্ত গোল, নোটস ও সেটিংস মুছে পুনরায় শুরু করুন।</p>
+                    <button class="btn btn-danger w-full mt-2" id="clearAllDataBtn">
+                        সব ডেটা স্থায়ীভাবে মুছুন
+                    </button>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Bottom Navigation Bar -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-target="home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">হোম</span>
+            </button>
+            <button class="nav-item" data-target="notes">
+                <span class="nav-icon">📝</span>
+                <span class="nav-label">নোট</span>
+            </button>
+            <button class="nav-item" data-target="notifications">
+                <span class="nav-icon">🔔</span>
+                <span class="nav-label">নোটিফিকেশন</span>
+            </button>
+            <button class="nav-item" data-target="goal">
+                <span class="nav-icon">🎯</span>
+                <span class="nav-label">লক্ষ্য</span>
+            </button>
+            <button class="nav-item" data-target="settings">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-label">সেটিংস</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- Full-Screen 3-Minute Cooldown Modal Screen -->
+    <div id="cooldownModal" class="full-screen-modal hidden">
+        <div class="cooldown-content">
+            <div class="cooldown-timer-ring">
+                <span class="cooldown-time" id="cooldownDisplay">০৩:০০</span>
+            </div>
+            <h2>পরবর্তী সেটআপের জন্য অপেক্ষা করুন</h2>
+            <p class="cooldown-sub">আপনার অ্যাকশনটি সিস্টেমে নিবন্ধিত হয়েছে। পরবর্তী পরিবর্তনের আগে ৩ মিনিট বিরতি নেওয়া আবশ্যক।</p>
+            <button class="btn btn-secondary btn-lg" id="closeCooldownBtn">ফিরে যান</button>
         </div>
-    `;
+    </div>
 
-    const oldCard = sliderWrapper.querySelector('.day-card.active');
-    sliderWrapper.appendChild(newCard);
+    <!-- Note Modal Form -->
+    <div id="noteModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="noteModalTitle">নতুন নোট লিখুন</h3>
+                <button class="close-btn" id="closeNoteModal">&times;</button>
+            </div>
+            <form id="noteForm">
+                <input type="hidden" id="noteIdInput">
+                <div class="form-group">
+                    <label>শিরোনাম</label>
+                    <input type="text" id="noteTitleInput" class="form-control" placeholder="যেমন: আজকের অর্জন" required>
+                </div>
+                <div class="form-group">
+                    <label>বিস্তারিত কথা / অনুপ্রেরণা</label>
+                    <textarea id="noteContentInput" class="form-control" rows="4" placeholder="আপনার মনের কথা বা শিক্ষণীয় বিষয় লিখুন..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="noteShowDailyInput" checked>
+                        <span>হোমস্ক্রিনের দৈনিক স্লাইডারে দেখাব (Daily View)</span>
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelNoteBtn">বাতিল</button>
+                    <button type="submit" class="btn btn-primary">সংরক্ষণ করুন</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    requestAnimationFrame(() => {
-        if (oldCard) {
-            oldCard.classList.remove('active');
-            oldCard.style.transform = slideDirection === 'right' ? 'translateX(-100%)' : 'translateX(100%)';
-            oldCard.style.opacity = '0';
-            setTimeout(() => oldCard.remove(), 350);
-        }
-        newCard.classList.add('active');
-        newCard.style.transform = 'translateX(0)';
-        newCard.style.opacity = '1';
-    });
-}
+    <!-- Notification Modal Form -->
+    <div id="notifModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="notifModalTitle">নতুন নোটিফিকেশন কনফিগার করুন</h3>
+                <button class="close-btn" id="closeNotifModal">&times;</button>
+            </div>
+            <form id="notifForm">
+                <input type="hidden" id="notifIdInput">
+                
+                <div class="form-group">
+                    <label>শিরোনাম</label>
+                    <input type="text" id="notifTitleInput" class="form-control" placeholder="আজকের লক্ষ্য — দিন {দিন}" required>
+                    <small class="help-text">ডাইনামিক টেক্সট: {দিন}, {মোটদিন}, {বাকি}, {শতাংশ}</small>
+                </div>
 
-// Navigation Controls
-window.navigateDay = function(direction) {
-    const targetDay = currentViewingDay + direction;
-    const slideDir = direction > 0 ? 'right' : 'left';
-    renderCurrentDayCard(targetDay, slideDir);
-};
+                <div class="form-group">
+                    <label>বার্তা (Message)</label>
+                    <textarea id="notifMessageInput" class="form-control" rows="2" placeholder="আর {বাকি} দিন বাকি। সফলতার দিকে এগিয়ে চলুন!" required></textarea>
+                </div>
 
-// Touch Gestures
-let startX = 0;
-let currentX = 0;
-let isDragging = false;
-const sliderWrapper = document.getElementById('sliderWrapper');
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>সময়</label>
+                        <input type="time" id="notifTimeInput" class="form-control" value="09:00" required>
+                    </div>
+                    <div class="form-group col">
+                        <label>পুনরাবৃত্তি</label>
+                        <select id="notifRepeatSelect" class="form-control">
+                            <option value="daily">প্রতিদিন</option>
+                            <option value="once">একবার</option>
+                            <option value="weekly">প্রতি সপ্তাহে</option>
+                        </select>
+                    </div>
+                </div>
 
-sliderWrapper.addEventListener('touchstart', (e) => {
-    if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT') return;
-    startX = e.touches[0].clientX;
-    isDragging = true;
-    const activeCard = sliderWrapper.querySelector('.day-card.active');
-    if (activeCard) activeCard.style.transition = 'none';
-}, { passive: true });
+                <div class="form-group">
+                    <label>ছবির URL (ঐচ্ছিক)</label>
+                    <input type="url" id="notifImageUrlInput" class="form-control" placeholder="https://example.com/image.jpg">
+                </div>
 
-sliderWrapper.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    currentX = e.touches[0].clientX;
-    const diffX = currentX - startX;
-    const activeCard = sliderWrapper.querySelector('.day-card.active');
-    if (activeCard) {
-        activeCard.style.transform = `translateX(${diffX}px) rotate(${diffX * 0.02}deg)`;
-    }
-}, { passive: true });
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="notifEnabledInput" checked>
+                        <span>নোটিফিকেশনটি সক্রিয় রাখুন</span>
+                    </label>
+                </div>
 
-sliderWrapper.addEventListener('touchend', (e) => {
-    if (!isDragging) return;
-    isDragging = false;
-    const diffX = currentX - startX;
-    const activeCard = sliderWrapper.querySelector('.day-card.active');
-    
-    if (activeCard) {
-        activeCard.style.transition = 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.35s ease';
-    }
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelNotifBtn">বাতিল</button>
+                    <button type="submit" class="btn btn-primary">সংরক্ষণ করুন</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    if (diffX < -50) {
-        if (window.navigator.vibrate) window.navigator.vibrate(20);
-        navigateDay(1);
-    } else if (diffX > 50) {
-        if (window.navigator.vibrate) window.navigator.vibrate(20);
-        navigateDay(-1);
-    } else if (activeCard) {
-        activeCard.style.transform = 'translateX(0) rotate(0deg)';
-    }
-    startX = 0;
-    currentX = 0;
-});
+    <!-- Generic Toast Message -->
+    <div id="toast" class="toast hidden"></div>
 
-// Business Logic
-window.handleCompletionToggle = async function(dayNum) {
-    const existing = await getStoreData('days_store', dayNum) || { dayNumber: dayNum, note: '', editCount: 0, completed: false };
-    if (existing.editCount >= 3) { renderCurrentDayCard(dayNum); return; }
-
-    const checkbox = document.getElementById('checkBtn');
-    existing.completed = checkbox.checked;
-    existing.editCount = (existing.editCount || 0) + 1;
-
-    if (existing.editCount >= 3) existing.completed = true;
-
-    await saveStoreData('days_store', existing);
-
-    if (existing.completed && dayNum < 90) {
-        setTimeout(() => renderCurrentDayCard(dayNum + 1, 'right'), 350);
-    } else {
-        renderCurrentDayCard(dayNum);
-    }
-};
-
-window.handleSaveNote = async function(dayNum) {
-    const existing = await getStoreData('days_store', dayNum) || { dayNumber: dayNum, completed: false, editCount: 0 };
-    if (existing.editCount >= 3) return;
-
-    const noteVal = document.getElementById('noteInput').value;
-    existing.note = noteVal;
-    existing.editCount = (existing.editCount || 0) + 1;
-
-    if (existing.editCount >= 3) {
-        existing.completed = true;
-        alert(`আপনি সর্বোচ্চ ৩ বার এডিট সম্পন্ন করেছেন! দিনটি অটোমেটিক "সম্পন্ন" হিসেবে লক হলো।`);
-    } else {
-        alert(`নোট সফলভাবে সেভ হয়েছে! (এডিট ব্যবহূত: ${toBengaliNumerals(existing.editCount)}/৩)`);
-    }
-
-    await saveStoreData('days_store', existing);
-
-    if (existing.completed && dayNum < 90) {
-        setTimeout(() => renderCurrentDayCard(dayNum + 1, 'right'), 350);
-    } else {
-        renderCurrentDayCard(dayNum);
-    }
-};
-
-// Audio Signal
-function playNotificationSound() {
-    try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        const ctx = new AudioContext();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.3);
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start();
-        osc.stop(ctx.currentTime + 0.5);
-    } catch(e){}
-}
-
-// Service Worker Registration
-let swRegistration = null;
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' })
-        .then(reg => {
-            swRegistration = reg;
-            console.log('90days SW Active', reg.scope);
-            updateNotifStatusUI();
-        })
-        .catch(err => console.error('SW Failed:', err));
-    });
-}
-
-const settingsModal = document.getElementById('settingsModal');
-document.getElementById('settingsOpen').addEventListener('click', async () => {
-    settingsModal.classList.add('open');
-    const t = await getStoreData('settings_store', 'notifTime');
-    const title = await getStoreData('settings_store', 'notifTitle');
-    const msg = await getStoreData('settings_store', 'notifMsg');
-    if (t) document.getElementById('notifTime').value = t.value;
-    if (title) document.getElementById('notifTitle').value = title.value;
-    if (msg) document.getElementById('notifMsg').value = msg.value;
-    updateNotifStatusUI();
-});
-
-document.getElementById('settingsClose').addEventListener('click', () => {
-    settingsModal.classList.remove('open');
-});
-
-document.getElementById('saveSettingsBtn').addEventListener('click', async () => {
-    await saveStoreData('settings_store', { key: 'notifTime', value: document.getElementById('notifTime').value });
-    await saveStoreData('settings_store', { key: 'notifTitle', value: document.getElementById('notifTitle').value });
-    await saveStoreData('settings_store', { key: 'notifMsg', value: document.getElementById('notifMsg').value });
-    
-    alert('সেটিংস সংরক্ষণ করা হয়েছে!');
-    settingsModal.classList.remove('open');
-});
-
-function updateNotifStatusUI() {
-    const statusText = document.getElementById('notifStatus');
-    if (!('Notification' in window)) {
-        statusText.textContent = 'ব্রাউজার নোটিফিকেশন সাপোর্টেড নয়।';
-        statusText.style.color = 'var(--danger-color)';
-        return;
-    }
-    if (Notification.permission === 'granted') {
-        statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশন অনুমতি সক্রিয় রয়েছে।';
-        statusText.style.color = 'var(--success-color)';
-    } else if (Notification.permission === 'denied') {
-        statusText.textContent = 'স্ট্যাটাস: পারমিশন ব্লকড! ব্রাউজার সেটিংস থেকে অন করুন।';
-        statusText.style.color = 'var(--danger-color)';
-    } else {
-        statusText.textContent = 'স্ট্যাটাস: নোটিফিকেশনের অনুমতি দেওয়া হয়নি।';
-        statusText.style.color = 'var(--warning-color)';
-    }
-}
-
-function triggerSWNotification(title, message) {
-    playNotificationSound();
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage({
-            type: 'SHOW_NOTIFICATION',
-            title: title,
-            message: message
-        });
-    } else if (swRegistration) {
-        swRegistration.showNotification(title, {
-            body: message,
-            icon: 'https://onlinecdndrive.vercel.app/90dayslogo.png',
-            vibrate: [200, 100, 200]
-        });
-    }
-}
-
-document.getElementById('requestNotifBtn').addEventListener('click', () => {
-    if ('Notification' in window) {
-        Notification.requestPermission().then(permission => {
-            updateNotifStatusUI();
-            if (permission === 'granted') {
-                triggerSWNotification('90days - টেস্ট নোটিফিকেশন', 'আপনার নোটিফিকেশন সফলভাবে কাজ করছে!');
-            }
-        });
-    }
-});
-
-let lastNotifSentMinute = '';
-async function checkNotificationTrigger() {
-    if (!('Notification' in window) || Notification.permission !== 'granted') return;
-    const notifTime = await getStoreData('settings_store', 'notifTime');
-    if (!notifTime) return;
-
-    const now = new Date();
-    const currentHM = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-
-    if (currentHM === notifTime.value && lastNotifSentMinute !== currentHM) {
-        lastNotifSentMinute = currentHM;
-        const titleObj = await getStoreData('settings_store', 'notifTitle');
-        const msgObj = await getStoreData('settings_store', 'notifMsg');
-
-        triggerSWNotification(
-            titleObj ? titleObj.value : '90days - রিমাইন্ডার',
-            msgObj ? msgObj.value : 'আজকের ট্র্যাকিং কি সম্পন্ন করেছেন?'
-        );
-    }
-}
-setInterval(checkNotificationTrigger, 5000);
-
-// Load App
-window.addEventListener('DOMContentLoaded', async () => {
-    await initDB();
-    await initTheme();
-    
-    let startDay = 1;
-    try {
-        const daysData = await getAllStoreData('days_store');
-        const daysMap = {};
-        daysData.forEach(d => daysMap[d.dayNumber] = d);
-        for (let i = 1; i <= 90; i++) {
-            if (!daysMap[i] || !daysMap[i].completed) { startDay = i; break; }
-        }
-    } catch(err) {}
-    renderCurrentDayCard(startDay);
-});
-</script>
 </body>
 </html>
-
